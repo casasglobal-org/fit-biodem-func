@@ -1,48 +1,96 @@
-"""Library of bio-demographic functions for modeling basic biological 
-processes in any organism using physiologically based demographic models 
-(PBDMs, see https://doi.org/10.1111/epp.12224)
+"""Library of bio-demographic functions for modeling basic biological
+processes in any organism using physiologically based demographic models
+(PBDMs, see https://doi.org/10.1111/epp.12224).
 """
-import math
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-T_l_tuta_absoluta = 7.9
-T_u_tuta_absoluta = 34.95
-a_tuta_absoluta = 0.0024
-b_tuta_absoluta = 3.95
-T_curr_sample = np.linspace(-5,40,1000)
+# Sample parameters for the developmental rate function of Tuta absoluta
+lower_temperature_threshold_tuta = 7.9
+upper_temperature_threshold_tuta = 34.95
+a_scale_parameter_tuta = 0.0024
+b_shape_parameter_tuta = 3.95
+temperatures_sample = np.linspace(-5, 40, 1000)
 
-def development_rate(a_const, b_const, T_lower, T_upper, T_curr):
-    """Temperature-dependent developmental rate modified from 
-        Briere et al (1999) https://doi.org/10.1093/ee/28.1.22
-        a_const, b_const are constants
-        T_lower, T_upper are lower and upper thermal thresholds
-        T_curr is the current temperature"""
-    R = []
-    for T_day in T_curr:
-        if T_day <= T_lower:
-            R_day = 0
-        elif T_day >= T_upper:
-            R_day = 0
+
+def development_rate(
+    a_scale_parameter,
+    b_shape_parameter,
+    lower_temperature_threshold,
+    upper_temperature_threshold,
+    temperature_series
+):
+    """Temperature-dependent developmental rate modified from
+        Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
+        a_scale_parameter, b_shape_parameter are constants
+        lower_temperature_threshold, upper_temperature_threshold
+        are lower and upper thermal thresholds
+        temperature_series is a list of temperatures."""
+    development_rate_series = []
+    for temperature in temperature_series:
+        if not is_in_range(
+            temperature,
+            lower_temperature_threshold, upper_temperature_threshold
+        ):
+            development_rate = 0
         else:
-            R_day = (a_const * (T_day - T_lower)
-                    / (1 + b_const ** (T_day - T_upper)))
-        R.append(R_day)
-    return R
+            development_rate = (
+                a_scale_parameter
+                * (temperature - lower_temperature_threshold)
+                / (1 + b_shape_parameter
+                    ** (temperature - upper_temperature_threshold))
+            )
+        development_rate_series.append(development_rate)
+    return development_rate_series
 
-plt.plot(T_curr_sample, development_rate(a_tuta_absoluta, 
-    b_tuta_absoluta, 
-    T_l_tuta_absoluta, 
-    T_u_tuta_absoluta, 
-    T_curr_sample), label = "R(t)")
-plt.legend(loc = "upper left")
-plt.xlabel('Temperature (°C)')
-plt.ylabel('Day$^-1$')
-plt.title(r"Developmental rate $\it{Tuta\ absoluta}$")
-plt.show()
+
+def is_in_range(number, lower_end, upper_end):
+    """Check if a number is included in range (inclusive)."""
+    if lower_end <= number <= upper_end:
+        return True
+    else:
+        return False
+
+
+def plot_bdm_func(
+    x_data, y_data, title, x_label, y_label,
+    lower_temperature_threshold,
+    upper_temperature_threshold
+):
+    """Plot biodemographic function to see how it looks."""
+    plt.plot(x_data, y_data)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.xlim((lower_temperature_threshold, upper_temperature_threshold))
+    plt.show()
+
+
+# Compute developmental rates for Tuta absoluta
+development_rate_series_tuta = development_rate(
+    a_scale_parameter_tuta,
+    b_shape_parameter_tuta,
+    lower_temperature_threshold_tuta,
+    upper_temperature_threshold_tuta,
+    temperatures_sample
+    )
+
+# Plot developmental rate function for Tuta absoluta
+plot_bdm_func(
+    x_data=temperatures_sample,
+    y_data=development_rate_series_tuta,
+    title=r"Developmental rate of $\it{Tuta\ absoluta}$",
+    x_label='Temperature (°C)',
+    y_label='Day$^-1$',
+    lower_temperature_threshold=lower_temperature_threshold_tuta-1,
+    upper_temperature_threshold=upper_temperature_threshold_tuta+1
+    )
+
 
 """ The following equations need to be turned into functions
+    as they are part of the libary.
+
 # Per capita fecundity profile on female age in days at the optimum temperature
 # from Bieri et al (1983) https://doi.org/10.5169/seals-402070
 
@@ -51,9 +99,9 @@ ovip(age_days) = constant_f * days / constant_g ^ age_days
 
 # The oviposition scalar (originally called FFTemperature in the Pascal code
 
-T_scalar = 1.0 - ((T - T_lower_threshold - a) / a) ^ 2
+T_scalar = 1.0 - ((T - lower_temperature_threshold_threshold - a) / a) ^ 2
 
-with a_constant = (T_upper_threshold - T_lower_threshold) / 2
+with a_scale_parameterant = (upper_temperature_threshold_threshold - lower_temperature_threshold_threshold) / 2
 
 
 # The temperature dependent mortality taken from Lobesia botrana paper
@@ -64,4 +112,3 @@ mu(T) = c_constant (T - T_min_mortality / T_min_mortality ) ^ 2
 def print_colors():
 
 """
-
