@@ -29,28 +29,17 @@ def development_rate(
         temperature_series is a list of temperatures."""
     development_rate_series = []
     for temperature in temperature_series:
-        if not is_in_range(
-            temperature,
-            lower_temperature_threshold, upper_temperature_threshold
-        ):
-            development_rate = 0
-        else:
+        if lower_temperature_threshold <= temperature <= upper_temperature_threshold:
             development_rate = (
                 a_scale_parameter
                 * (temperature - lower_temperature_threshold)
                 / (1 + b_shape_parameter
                     ** (temperature - upper_temperature_threshold))
             )
+        else:
+            development_rate = 0
         development_rate_series.append(development_rate)
     return development_rate_series
-
-
-def is_in_range(number, lower_end, upper_end):
-    """Check if a number is included in range (inclusive)."""
-    if lower_end <= number <= upper_end:
-        return True
-    else:
-        return False
 
 
 def plot_bdm_func(
@@ -94,7 +83,7 @@ plot_bdm_func(
 # Per capita fecundity profile on female age in days at the optimum temperature
 # from Bieri et al (1983) https://doi.org/10.5169/seals-402070
 
-ovip(age_days) = constant_f * days / constant_g ^ age_days 
+ovip(age_days) = constant_f * days / constant_g ^ age_days
 
 
 # The oviposition scalar (originally called FFTemperature in the Pascal code
