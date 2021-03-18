@@ -56,48 +56,49 @@ def plot_bdm_func(
     plt.show()
 
 
-# Compute developmental rates for Tuta absoluta
-development_rate_series_tuta = development_rate(
-    a_scale_parameter_tuta,
-    b_shape_parameter_tuta,
-    lower_temperature_threshold_tuta,
-    upper_temperature_threshold_tuta,
-    temperatures_sample
-    )
+if __name__ == "__main__":
+    # Compute developmental rates for Tuta absoluta
+    development_rate_series_tuta = development_rate(
+        a_scale_parameter_tuta,
+        b_shape_parameter_tuta,
+        lower_temperature_threshold_tuta,
+        upper_temperature_threshold_tuta,
+        temperatures_sample
+        )
 
-# Plot developmental rate function for Tuta absoluta
-plot_bdm_func(
-    x_data=temperatures_sample,
-    y_data=development_rate_series_tuta,
-    title=r"Developmental rate of $\it{Tuta\ absoluta}$",
-    x_label='Temperature (°C)',
-    y_label='Day$^-1$',
-    lower_temperature_threshold=lower_temperature_threshold_tuta-1,
-    upper_temperature_threshold=upper_temperature_threshold_tuta+1
-    )
-
-
-""" The following equations need to be turned into functions
-    as they are part of the libary.
-
-# Per capita fecundity profile on female age in days at the optimum temperature
-# from Bieri et al (1983) https://doi.org/10.5169/seals-402070
-
-ovip(age_days) = constant_f * days / constant_g ^ age_days
+    # Plot developmental rate function for Tuta absoluta
+    plot_bdm_func(
+        x_data=temperatures_sample,
+        y_data=development_rate_series_tuta,
+        title=r"Developmental rate of $\it{Tuta\ absoluta}$",
+        x_label='Temperature (°C)',
+        y_label='Day$^-1$',
+        lower_temperature_threshold=lower_temperature_threshold_tuta-1,
+        upper_temperature_threshold=upper_temperature_threshold_tuta+1
+        )
 
 
-# The oviposition scalar (originally called FFTemperature in the Pascal code
+    """ The following equations need to be turned into functions
+        as they are part of the libary.
 
-T_scalar = 1.0 - ((T - lower_temperature_threshold_threshold - a) / a) ^ 2
+    # Per capita fecundity profile on female age in days at the optimum temperature
+    # from Bieri et al (1983) https://doi.org/10.5169/seals-402070
 
-with a_scale_parameterant = (upper_temperature_threshold_threshold - lower_temperature_threshold_threshold) / 2
+    ovip(age_days) = constant_f * days / constant_g ^ age_days
 
 
-# The temperature dependent mortality taken from Lobesia botrana paper
-# Gutierrez et al. (2012) https://doi.org/10.1111/j.1461-9563.2011.00566.x
+    # The oviposition scalar (originally called FFTemperature in the Pascal code
 
-mu(T) = c_constant (T - T_min_mortality / T_min_mortality ) ^ 2
+    T_scalar = 1.0 - ((T - lower_temperature_threshold_threshold - a) / a) ^ 2
 
-def print_colors():
+    with a_scale_parameterant = (upper_temperature_threshold_threshold - lower_temperature_threshold_threshold) / 2
 
-"""
+
+    # The temperature dependent mortality taken from Lobesia botrana paper
+    # Gutierrez et al. (2012) https://doi.org/10.1111/j.1461-9563.2011.00566.x
+
+    mu(T) = c_constant (T - T_min_mortality / T_min_mortality ) ^ 2
+
+    def print_colors():
+
+    """
