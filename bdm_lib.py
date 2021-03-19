@@ -3,7 +3,7 @@ processes in any organism using physiologically based demographic models
 (PBDMs, see https://doi.org/10.1111/epp.12224).
 """
 
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 import numpy as np
 
 # Sample parameters for the developmental rate function of Tuta absoluta
@@ -29,7 +29,10 @@ def development_rate(
         temperature_series is a list of temperatures."""
     development_rate_series = []
     for temperature in temperature_series:
-        if lower_temperature_threshold <= temperature <= upper_temperature_threshold:
+        if (
+            lower_temperature_threshold <=
+                temperature <= upper_temperature_threshold
+                ):
             development_rate = (
                 a_scale_parameter
                 * (temperature - lower_temperature_threshold)
