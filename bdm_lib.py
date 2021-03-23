@@ -11,6 +11,15 @@ lower_temperature_threshold_tuta = 7.9
 upper_temperature_threshold_tuta = 34.95
 a_scale_parameter_tuta = 0.0024
 b_shape_parameter_tuta = 3.95
+
+# Sample parameters for the developmental rate function
+# of Mediterranean fruit fly (Ceratitis capitata) adults
+lower_temperature_threshold_medfly = 9.5
+upper_temperature_threshold_medfly = 33.7
+a_scale_parameter_medfly = 0.0059
+b_shape_parameter_medfly = 4.8
+
+# Some temperature-like values for plotting
 temperatures_sample = np.linspace(-5, 40, 1000)
 
 
@@ -69,6 +78,15 @@ if __name__ == "__main__":
         temperatures_sample
         )
 
+    # Compute developmental rates for Ceratitis capitata
+    development_rate_series_medfly = development_rate(
+        a_scale_parameter_medfly,
+        b_shape_parameter_medfly,
+        lower_temperature_threshold_medfly,
+        upper_temperature_threshold_medfly,
+        temperatures_sample
+        )
+
     # Plot developmental rate function for Tuta absoluta
     plot_bdm_func(
         x_data=temperatures_sample,
@@ -76,8 +94,19 @@ if __name__ == "__main__":
         title=r"Developmental rate of $\it{Tuta\ absoluta}$",
         x_label='Temperature (°C)',
         y_label='Day$^-1$',
-        lower_temperature_threshold=lower_temperature_threshold_tuta-1,
-        upper_temperature_threshold=upper_temperature_threshold_tuta+1
+        lower_temperature_threshold=lower_temperature_threshold_tuta-2,
+        upper_temperature_threshold=upper_temperature_threshold_tuta+2
+        )
+
+    # Plot developmental rate function for Ceratitis capitata
+    plot_bdm_func(
+        x_data=temperatures_sample,
+        y_data=development_rate_series_medfly,
+        title=r"Developmental rate of $\it{Ceratitis\ capitata}$",
+        x_label='Temperature (°C)',
+        y_label='Day$^-1$',
+        lower_temperature_threshold=lower_temperature_threshold_medfly-2,
+        upper_temperature_threshold=upper_temperature_threshold_medfly+2
         )
 
 

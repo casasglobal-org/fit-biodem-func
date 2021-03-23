@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "fitbiodem"
+version = "0.1.0"
+description = "Application to interactively fit a set of bio-demographic functions for modeling basic biological processes in any organism using physiologically based demographic models (PBDMs, see https://doi.org/10.1111/epp.12224)"
+authors = ["Luigi Ponti <quartese@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.20.1"
+matplotlib = "^3.3.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
