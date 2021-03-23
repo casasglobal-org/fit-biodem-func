@@ -7,3 +7,7 @@ https://doi.org/10.1111/epp.12224).
 from bdm_lib import development_rate
 
 
+# Check out
+# https://lmfit.github.io/lmfit-py/
+# https://zenodo.org/badge/DOI/10.5281/zenodo.4516651.svg
+# https://mike.depalatis.net/blog/lmfit.html
