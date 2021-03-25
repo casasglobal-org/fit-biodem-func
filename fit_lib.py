@@ -4,6 +4,8 @@ organism using physiologically based demographic models (PBDMs, see
 https://doi.org/10.1111/epp.12224).
 """
 
+import lmfit
+
 from bdm_lib import development_rate
 
 
