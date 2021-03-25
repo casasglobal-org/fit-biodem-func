@@ -24,11 +24,11 @@ temperatures_sample = np.linspace(-5, 40, 1000)
 
 
 def development_rate(
+    temperature,
     a_scale_parameter,
     b_shape_parameter,
     lower_temperature_threshold,
     upper_temperature_threshold,
-    temperature_series
 ):
     """Temperature-dependent developmental rate modified from
         Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
@@ -36,22 +36,15 @@ def development_rate(
         lower_temperature_threshold, upper_temperature_threshold
         are lower and upper thermal thresholds
         temperature_series is a list of temperatures."""
-    development_rate_series = []
-    for temperature in temperature_series:
-        if (
-            lower_temperature_threshold <=
-                temperature <= upper_temperature_threshold
-                ):
-            development_rate = (
-                a_scale_parameter
-                * (temperature - lower_temperature_threshold)
-                / (1 + b_shape_parameter
-                    ** (temperature - upper_temperature_threshold))
-            )
-        else:
-            development_rate = 0
-        development_rate_series.append(development_rate)
-    return development_rate_series
+    development_rate = 0
+    if lower_temperature_threshold <= temperature <= upper_temperature_threshold:
+        development_rate = (
+            a_scale_parameter
+            * (temperature - lower_temperature_threshold)
+            / (1 + b_shape_parameter
+                ** (temperature - upper_temperature_threshold))
+        )
+    return development_rate
 
 
 def plot_bdm_func(
