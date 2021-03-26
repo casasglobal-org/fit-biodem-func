@@ -13,3 +13,12 @@ from bdm_lib import development_rate
 # https://lmfit.github.io/lmfit-py/
 # https://zenodo.org/badge/DOI/10.5281/zenodo.4516651.svg
 # https://mike.depalatis.net/blog/lmfit.html
+
+f = Parameter(name (str) – Name of the Parameter,
+    value (float, optional) – Numerical Parameter value.
+    vary (bool, optional) – Whether the Parameter is varied during a fit (default is True).
+    min (float, optional) – Lower bound for value (default is -numpy.inf, no lower bound).
+    max (float, optional) – Upper bound for value (default is numpy.inf, no upper bound).
+    expr (str, optional) – Mathematical expression used to constrain the value during the fit (default is None).
+    brute_step (float, optional) – Step size for grid points in the brute method (default is None).
+    user_data (optional) – User-definable extra attribute used for a Parameter (default is None).)
