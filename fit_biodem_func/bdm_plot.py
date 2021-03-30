@@ -43,20 +43,20 @@ def plot_bdm_func(
 if __name__ == "__main__":
     # Compute developmental rates for Tuta absoluta
     development_rate_series_tuta = development_rate(
+        temperatures_sample,
         a_scale_parameter_tuta,
         b_shape_parameter_tuta,
         lower_temperature_threshold_tuta,
-        upper_temperature_threshold_tuta,
-        temperatures_sample
+        upper_temperature_threshold_tuta
         )
 
     # Compute developmental rates for Ceratitis capitata
     development_rate_series_medfly = development_rate(
+        temperatures_sample,
         a_scale_parameter_medfly,
         b_shape_parameter_medfly,
         lower_temperature_threshold_medfly,
         upper_temperature_threshold_medfly,
-        temperatures_sample
         )
 
     # Plot developmental rate function for Tuta absoluta

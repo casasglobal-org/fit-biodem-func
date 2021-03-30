@@ -7,11 +7,8 @@ authors = ["Luigi Ponti <quartese@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 numpy = "^1.20.1"
-<<<<<<< HEAD
 lmfit = "^1.0.2"
-=======
 matplotlib = "^3.3.4"
->>>>>>> main
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
