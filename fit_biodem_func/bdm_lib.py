@@ -4,8 +4,6 @@ processes in any organism using physiologically based demographic models
 """
 
 
-
-
 def development_rate(
     temperature,
     a_scale_parameter,
@@ -19,20 +17,19 @@ def development_rate(
         lower_temperature_threshold, upper_temperature_threshold
         are lower and upper thermal thresholds
         temperature_series is a list of temperatures."""
-    development_rate = 0
-    if lower_temperature_threshold <= temperature <= upper_temperature_threshold:
-        development_rate = (
-            a_scale_parameter
-            * (temperature - lower_temperature_threshold)
-            / (1 + b_shape_parameter
-                ** (temperature - upper_temperature_threshold))
-        )
+    development_rate = [0] * len(temperature)
+    for index, t in enumerate(temperature):
+        if (lower_temperature_threshold < t < upper_temperature_threshold):
+            development_rate[index] = (
+                a_scale_parameter
+                * (t - lower_temperature_threshold)
+                / (1 + b_shape_parameter
+                    ** (t - upper_temperature_threshold))
+            )
     return development_rate
 
 
-
-
-    """ The following equations need to be turned into functions
+""" The following equations need to be turned into functions
         as they are part of the libary.
 
     # Per capita fecundity profile on female age in days at the optimum temperature
