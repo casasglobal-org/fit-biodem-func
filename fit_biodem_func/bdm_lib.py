@@ -20,7 +20,7 @@ def development_rate(
         are lower and upper thermal thresholds
         temperature_series is a list of temperatures."""
     development_rate = 0
-    if lower_temperature_threshold <= temperature <= upper_temperature_threshold:
+    if lower_temperature_threshold < temperature < upper_temperature_threshold:
         development_rate = (
             a_scale_parameter
             * (temperature - lower_temperature_threshold)
