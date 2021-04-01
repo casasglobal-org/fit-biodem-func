@@ -39,7 +39,7 @@ def plot_bdm_func(
     plt.show()
 
 
-def dev_rate_list(
+def get_development_rates(
     temperature_list,
     a_scale_parameter, b_shape_parameter,
     lower_temperature_threshold, upper_temperature_threshold
@@ -61,7 +61,7 @@ def dev_rate_list(
 
 if __name__ == "__main__":
     # Compute developmental rates for Tuta absoluta
-    development_rate_list_tuta = dev_rate_list(
+    development_rate_list_tuta = get_development_rates(
         temperature_list,
         a_scale_parameter_tuta,
         b_shape_parameter_tuta,
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         )
 
     # Compute developmental rates for Ceratitis capitata
-    development_rate_list_medfly = dev_rate_list(
+    development_rate_list_medfly = get_development_rates(
         temperature_list,
         a_scale_parameter_medfly,
         b_shape_parameter_medfly,
