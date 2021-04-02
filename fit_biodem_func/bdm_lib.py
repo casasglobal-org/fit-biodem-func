@@ -4,6 +4,28 @@ processes in any organism using physiologically based demographic models
 """
 
 
+def development_rate_bounded(
+    temperature,
+    a_scale_parameter,
+    b_shape_parameter,
+    lower_temperature_threshold,
+    upper_temperature_threshold,
+):
+    """Temperature-dependent developmental rate modified from
+        Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
+        a_scale_parameter, b_shape_parameter are constants
+        lower_temperature_threshold, upper_temperature_threshold
+        are lower and upper thermal thresholds
+        temperature_series is a list of temperatures."""
+    development_rate_bounded = 0
+    if lower_temperature_threshold < temperature < upper_temperature_threshold:
+        development_rate_bounded = (
+            a_scale_parameter
+            * (temperature - lower_temperature_threshold)
+            / (1 + b_shape_parameter
+                ** (temperature - upper_temperature_threshold))
+        )
+    return development_rate_bounded
 
 
 def development_rate(
@@ -18,17 +40,15 @@ def development_rate(
         a_scale_parameter, b_shape_parameter are constants
         lower_temperature_threshold, upper_temperature_threshold
         are lower and upper thermal thresholds
-        temperature_series is a list of temperatures."""
-    development_rate = 0
-    if lower_temperature_threshold < temperature < upper_temperature_threshold:
-        development_rate = (
-            a_scale_parameter
-            * (temperature - lower_temperature_threshold)
-            / (1 + b_shape_parameter
-                ** (temperature - upper_temperature_threshold))
-        )
+        temperature_series is a list of temperatures.
+        Version without temperature bounds. See development_rate_bounded"""
+    development_rate = (
+        a_scale_parameter
+        * (temperature - lower_temperature_threshold)
+        / (1 + b_shape_parameter
+            ** (temperature - upper_temperature_threshold))
+    )
     return development_rate
-
 
 
 

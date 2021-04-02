@@ -6,7 +6,7 @@ physiologically based demographic models (PBDMs, see https
 from matplotlib import pyplot as plt
 import numpy as np
 
-from bdm_lib import development_rate
+from .bdm_lib import development_rate
 
 
 # Sample parameters for the developmental rate function of Tuta absoluta
