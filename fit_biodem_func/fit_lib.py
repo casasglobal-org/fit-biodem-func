@@ -5,42 +5,64 @@ https://doi.org/10.1111/epp.12224).
 """
 
 import numpy as np
+import lmfit
 
-from lmfit import Model, Parameters, report_fit
-from .bdm_plot import get_development_rates
+# from .bdm_lib import development_rate
 
 # Data:
 # Experimental temperatures
-temperature_list_tuta = [10, 15, 20, 25, 30, 17, 22, 26, 28, 30, 33, 14, 19,
-                         27, 6, 10, 15, 20, 25, 30, 33, 36]
+temperature_list_tuta = np.array([10, 15, 20, 25, 30, 17, 22, 26, 28, 30, 33,
+                                  14, 19, 27, 6, 10, 15, 20, 25, 30, 33, 36])
 # Developmental rates measured at the experimental temperatures above
-development_rate_list_tuta = [0.0087, 0.0156, 0.0286, 0.0435, 0.0556, 0.0154,
-                              0.0312, 0.0417, 0.0500, 0.0500, 0.0588, 0.0131,
-                              0.0250, 0.0417, 0.0080, 0.0099, 0.0173, 0.0276,
-                              0.0409, 0.0508, 0.0546, 0]
+development_rate_list_tuta = np.array([0.0087, 0.0156, 0.0286, 0.0435, 0.0556,
+                                       0.0154, 0.0312, 0.0417, 0.0500, 0.0500,
+                                       0.0588, 0.0131, 0.0250, 0.0417, 0.0080,
+                                       0.0099, 0.0173, 0.0276, 0.0409, 0.0508,
+                                       0.0546, 0])
 
 
-pars = Parameters()
+class DevelopmentRateModel(lmfit.Model):
+    def __init__(self, *args, **kwargs):
+        def development_rate(
+            temperature,
+            a_scale_parameter,
+            b_shape_parameter,
+            lower_temperature_threshold,
+            upper_temperature_threshold
+        ):
+            """Temperature-dependent developmental rate modified from
+                Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
+                a_scale_parameter, b_shape_parameter are constants
+                lower_temperature_threshold, upper_temperature_threshold
+                are lower and upper thermal thresholds
+                temperature_series is a list of temperatures."""
+            development_rate = (
+                a_scale_parameter
+                * (temperature - lower_temperature_threshold)
+                / pow(1 + b_shape_parameter,
+                      (temperature - upper_temperature_threshold))
+            )
+            return development_rate
+            super(DevelopmentRateModel, self).__init__(development_rate, *args,
+                                                       **kwargs)
 
-""" Place math constraint that
-upper_temperature_threshold >= lower_temperature_threshold
-https://lmfit.github.io/lmfit-py/constraints.html """
-pars.add('lower_temperature_threshold', value=1, vary=True, min=-100, max=100)
-pars.add('delta', value=1, min=0, vary=True)
-pars.add('upper_temperature_threshold', vary=True, min=-100, max=100,
-         expr='lower_temperature_threshold+delta')
+    def guess(self, data, **kwargs):
+        params = self.make_params()
 
-pars.add('a_scale_parameter', min=0)
-pars.add('b_shape_parameter', min=0)
+        def pset(param, value):
+            params["%s%s" % (self.prefix, param)].set(value=value)
+        pset("a_scale_parameter", 0.0001)
+        pset("b_scale_parameter", 2)
+        pset("lower_temperature_threshold", np.min(data))
+        pset("upper_temperature_threshold", np.max(data))
+        return lmfit.models.update_param_vals(params, self.prefix, **kwargs)
 
-# Model:
-model = Model(get_development_rates, independent_vars=['temperature_list'])
 
-result = model.fit(development_rate_list_tuta,
-                   temperature_list=temperature_list_tuta,
-                   nan_policy='propagate')
+model = DevelopmentRateModel()
+params = model.guess(development_rate_list_tuta, temperature=temperature_list_tuta)
+fit = model.fit(development_rate_list_tuta, params, temperature=temperature_list_tuta)
 
-print(result.values)
+
 
 # Check out
 # https://lmfit.github.io/lmfit-py/

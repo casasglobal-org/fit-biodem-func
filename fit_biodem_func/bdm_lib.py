@@ -9,7 +9,7 @@ def development_rate_bounded(
     a_scale_parameter,
     b_shape_parameter,
     lower_temperature_threshold,
-    upper_temperature_threshold,
+    upper_temperature_threshold
 ):
     """Temperature-dependent developmental rate modified from
         Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
@@ -33,7 +33,7 @@ def development_rate(
     a_scale_parameter,
     b_shape_parameter,
     lower_temperature_threshold,
-    upper_temperature_threshold,
+    upper_temperature_threshold
 ):
     """Temperature-dependent developmental rate modified from
         Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
