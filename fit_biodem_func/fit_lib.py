@@ -22,29 +22,33 @@ development_rate_list_tuta = np.array([0.0087, 0.0156, 0.0286, 0.0435, 0.0556,
 
 
 class DevelopmentRateModel(lmfit.Model):
+
     def __init__(self, *args, **kwargs):
-        def development_rate(
-            temperature,
-            a_scale_parameter,
-            b_shape_parameter,
-            lower_temperature_threshold,
-            upper_temperature_threshold
-        ):
-            """Temperature-dependent developmental rate modified from
-                Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
-                a_scale_parameter, b_shape_parameter are constants
-                lower_temperature_threshold, upper_temperature_threshold
-                are lower and upper thermal thresholds
-                temperature_series is a list of temperatures."""
-            development_rate = (
-                a_scale_parameter
-                * (temperature - lower_temperature_threshold)
-                / pow(1 + b_shape_parameter,
-                      (temperature - upper_temperature_threshold))
-            )
-            return development_rate
-            super(DevelopmentRateModel, self).__init__(development_rate, *args,
-                                                       **kwargs)
+        # TODO: how to get this? You can call development_rate but where do the
+        # parameters for that method come from? I don't see them here
+        development_rate = None
+        super().__init__(development_rate, *args, **kwargs)
+
+    def development_rate(
+        temperature,
+        a_scale_parameter,
+        b_shape_parameter,
+        lower_temperature_threshold,
+        upper_temperature_threshold
+    ):
+        """Temperature-dependent developmental rate modified from
+            Briere et al(1999) https://doi.org/10.1093/ee/28.1.22
+            a_scale_parameter, b_shape_parameter are constants
+            lower_temperature_threshold, upper_temperature_threshold
+            are lower and upper thermal thresholds
+            temperature_series is a list of temperatures."""
+        development_rate = (
+            a_scale_parameter
+            * (temperature - lower_temperature_threshold)
+            / pow(1 + b_shape_parameter,
+                    (temperature - upper_temperature_threshold))
+        )
+        return development_rate
 
     def guess(self, data, **kwargs):
         params = self.make_params()
