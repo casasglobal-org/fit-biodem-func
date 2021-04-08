@@ -12,6 +12,7 @@ lmfit = "^1.0.2"
 SQLAlchemy = "^1.4.6"
 boto3 = "^1.17.46"
 Flask = "^1.1.2"
+psycopg2-binary = "^2.8.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
