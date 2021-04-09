@@ -17,7 +17,7 @@ def create_app():
     application = Flask(__name__)
 
     # Pull from config file
-    application.config.from_object('config.Config')
+    application.config.from_object('fit_biodem_func.config.Config')
 
     # Initailize database
     db.init_app(application)           # <- Gets called in our models.py file
@@ -29,5 +29,6 @@ def create_app():
 
     return application
 
-# Create application
-app = create_app()
+
+if __name__ == "__main__":
+    app = create_app()
