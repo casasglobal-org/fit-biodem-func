@@ -2,17 +2,10 @@
 https://betterprogramming.pub/flask-mysql-and-aws-a-complicated-love-triangle-8ea5588e40ac
  """
 
-from app import create_app 
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-# Create application
-application = create_app()
-
-# Import database schemas
-from app import models
 
 # Databases
 db = SQLAlchemy()    # <-Initialize database object
@@ -35,3 +28,6 @@ def create_app():
     # See https://hackersandslackers.com/flask-sqlalchemy-database-models/
 
     return application
+
+# Create application
+app = create_app()
