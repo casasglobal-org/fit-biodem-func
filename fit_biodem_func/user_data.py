@@ -2,17 +2,10 @@
 https://betterprogramming.pub/flask-mysql-and-aws-a-complicated-love-triangle-8ea5588e40ac
  """
 
-from app import create_app 
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-# Create application
-application = create_app()
-
-# Import database schemas
-from app import models
 
 # Databases
 db = SQLAlchemy()    # <-Initialize database object
@@ -24,7 +17,7 @@ def create_app():
     application = Flask(__name__)
 
     # Pull from config file
-    application.config.from_object('config.Config')
+    application.config.from_object('fit_biodem_func.config.Config')
 
     # Initailize database
     db.init_app(application)           # <- Gets called in our models.py file
@@ -35,3 +28,7 @@ def create_app():
     # See https://hackersandslackers.com/flask-sqlalchemy-database-models/
 
     return application
+
+
+if __name__ == "__main__":
+    app = create_app()
