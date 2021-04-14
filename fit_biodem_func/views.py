@@ -6,12 +6,12 @@ poetry run flask run """
 
 import os
 from flask import (
-    Flask, flash, request, render_template, 
+    Flask, flash, request, render_template,
     redirect, url_for, send_from_directory)
 from werkzeug.utils import secure_filename
 from .user_data import create_app
 
-UPLOAD_FOLDER = '/uploads'
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 app = create_app()
@@ -51,8 +51,15 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
-    return
-
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -60,7 +67,8 @@ def uploaded_file(filename):
                                filename)
 
 
-@app.route('/', methods=['GET', 'POST'])
+# this route was defined as / and therefor overrode the earlier '/' endpoint
+@app.route('/userdata', methods=['GET', 'POST'])
 def get_userdata():
     if request.method == 'POST' and 'first_name' in request.form:
         first_name = request.form.get('first_name')
@@ -70,4 +78,3 @@ def get_userdata():
                            first_name=first_name,
                            last_name=last_name,
                            email=email)
-
