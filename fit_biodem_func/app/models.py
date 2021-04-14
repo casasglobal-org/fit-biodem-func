@@ -4,7 +4,9 @@ https://betterprogramming.pub/flask-mysql-and-aws-a-complicated-love-triangle-8e
 
 from datetime import datetime
 
-from app import db  # Not sure what this does
+# I don't understand where the following statemment is importing from
+# Seems like the app created in user_data.py
+from app import db
 
 
 class testDB(db.Model):
