@@ -13,3 +13,5 @@ export FLASK_ENV=development
 export FLASK_APP=fit_biodem_func/views.py
 poetry run flask run
 ```
+
+For uploads create an `uploads` folder in the root project folder.
