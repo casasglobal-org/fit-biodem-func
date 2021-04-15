@@ -11,7 +11,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from .user_data import create_app
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 app = create_app()
@@ -51,15 +51,8 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template('index.html')
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
