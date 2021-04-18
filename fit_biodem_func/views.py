@@ -11,6 +11,7 @@ from flask import (
     url_for, send_from_directory)
 from werkzeug.utils import secure_filename
 from .user_data import create_app
+from .fit_lib import DevelopmentRateModel
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -93,4 +94,3 @@ def fit_uploaded_data(path, filename):
             development_rate_list.append(float(row['dev_rate']))
         print(temperature_list)
         print(development_rate_list)
-    # Call funciton fitting routine from module [...]
