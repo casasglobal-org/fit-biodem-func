@@ -56,10 +56,7 @@ fit.plot_fit()
 fit.plot_residuals()
 plt.show()
 
-
-
-
 # Check out
 # https://lmfit.github.io/lmfit-py/
-# https://zenodo.org/badge/DOI/10.5281/zenodo.4516651.svg
+# https://doi.org/10.5281/zenodo.4516651
 # https://mike.depalatis.net/blog/lmfit.html
