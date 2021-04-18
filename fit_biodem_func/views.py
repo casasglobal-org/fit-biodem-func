@@ -5,9 +5,10 @@ poetry run flask run """
 
 
 import os
+import csv
 from flask import (
-    Flask, flash, request, render_template,
-    redirect, url_for, send_from_directory)
+    flash, request, render_template, redirect,
+    url_for, send_from_directory)
 from werkzeug.utils import secure_filename
 from .user_data import create_app
 
@@ -49,18 +50,20 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            fit_uploaded_data(app.config['UPLOAD_FOLDER'], filename)
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return render_template('index.html')
 
 
+# Serving the uploaded file
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
 
-# this route was defined as / and therefor overrode the earlier '/' endpoint
+# This route was defined as / and therefor overrode the earlier '/' endpoint
 @app.route('/userdata', methods=['GET', 'POST'])
 def get_userdata():
     if request.method == 'POST' and 'first_name' in request.form:
@@ -71,3 +74,23 @@ def get_userdata():
                            first_name=first_name,
                            last_name=last_name,
                            email=email)
+
+
+# https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask 
+def fit_uploaded_data(path, filename):
+    # Deduce the format of the CSV file
+    csv_upload_file = os.path.join(path, filename)
+    with open(csv_upload_file, newline='') as csvfile:
+        # dialect = csv.Sniffer().sniff(csvfile.readline(), ['\t', ','])
+        # csvfile.seek(0)  # sets the pointer to the biginning
+        reader = csv.DictReader(csvfile, delimiter='\t')
+        # reader.fieldnames = 'temperature', 'development_rate'
+        # next(reader)
+        temperature_list = []
+        development_rate_list = []
+        for row in reader:
+            temperature_list.append(float(row['temperature']))
+            development_rate_list.append(float(row['dev_rate']))
+        print(temperature_list)
+        print(development_rate_list)
+    # Call funciton fitting routine from module [...]
