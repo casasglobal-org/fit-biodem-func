@@ -41,22 +41,23 @@ class DevelopmentRateModel(lmfit.Model):
         return lmfit.models.update_param_vals(params, self.prefix, **kwargs)
 
 
-# Instantiate model
-model = DevelopmentRateModel()
-# Guess parameters
-params = model.guess(development_rate_list_tuta,
-                     temperature=temperature_list_tuta)
-# Fit function
-fit = model.fit(development_rate_list_tuta, params,
-                temperature=temperature_list_tuta)
-# Print fit report
-print(fit.fit_report())
-# Plot fit results
-fit.plot_fit()
-fit.plot_residuals()
-plt.show()
+if __name__ == "__main__":
+    # Instantiate model
+    model = DevelopmentRateModel()
+    # Guess parameters
+    params = model.guess(development_rate_list_tuta,
+                        temperature=temperature_list_tuta)
+    # Fit function
+    fit = model.fit(development_rate_list_tuta, params,
+                    temperature=temperature_list_tuta)
+    # Print fit report
+    print(fit.fit_report())
+    # Plot fit results
+    fit.plot_fit()
+    fit.plot_residuals()
+    plt.show()
 
-# Check out
-# https://lmfit.github.io/lmfit-py/
-# https://doi.org/10.5281/zenodo.4516651
-# https://mike.depalatis.net/blog/lmfit.html
+    # Check out
+    # https://lmfit.github.io/lmfit-py/
+    # https://doi.org/10.5281/zenodo.4516651
+    # https://mike.depalatis.net/blog/lmfit.html
