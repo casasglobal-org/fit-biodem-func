@@ -24,13 +24,6 @@ app.config['PLOT_FOLDER'] = PLOT_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
-""" @app.route('/')
-@app.route('/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
- """
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -95,7 +88,7 @@ def get_userdata():
                            email=email)
 
 
-# https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask 
+# https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask
 def fit_uploaded_data(full_path_file):
     # Deduce the format of the CSV file
     with open(full_path_file, newline='') as csvfile:
