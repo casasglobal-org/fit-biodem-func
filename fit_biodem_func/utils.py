@@ -1,6 +1,7 @@
 import csv
+import os
 
-from .fit_lib import DevelopmentRateModel
+from .fit_lib import DevelopmentRateModel, plt
 
 
 # https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask
@@ -29,3 +30,14 @@ def fit_uploaded_data(full_path_file):
                         temperature=temperature_list)
         # Print fit report
         return fit
+
+
+def create_plot(target_folder, fit, filename):
+    base_filename = os.path.splitext(filename)[0]
+    png_plot_file = os.path.join(target_folder, base_filename + '.png')
+    plt.ioff()
+    plt.figure()
+    fit.plot_fit()
+    fit.plot_residuals()
+    plt.savefig(png_plot_file, dpi=300)
+    return png_plot_file
