@@ -10,18 +10,17 @@ from flask import (
     flash, request, render_template, redirect,
     url_for, send_from_directory)
 from werkzeug.utils import secure_filename
-import base64
-from io import BytesIO
-from matplotlib.figure import Figure
 from .user_data import create_app
 from .fit_lib import DevelopmentRateModel, plt
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
+PLOT_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/plots')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 app = create_app()
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['PLOT_FOLDER'] = PLOT_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
@@ -40,6 +39,8 @@ def allowed_file(filename):
 # https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    fit_report_string = None
+    png_plot_file = None
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -56,10 +57,22 @@ def upload_file():
             csv_upload_file = os.path.join(
                 app.config['UPLOAD_FOLDER'], filename)
             file.save(csv_upload_file)
-            fit_uploaded_data(csv_upload_file)
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return render_template('index.html')
+            fit = fit_uploaded_data(csv_upload_file)
+            fit_report_string = fit.fit_report()
+            base_filename = os.path.splitext(filename)[0]
+            png_plot_file = os.path.join(
+                app.config['PLOT_FOLDER'], base_filename + '.png')
+            plt.ioff()
+            plt.figure()
+            fit.plot_fit()
+            fit.plot_residuals()
+            plt.savefig(png_plot_file, dpi=300)
+
+            # return redirect(url_for('uploaded_file',
+            # filename=filename))
+    return render_template('index.html',
+                           png_plot=png_plot_file,
+                           report_string=fit_report_string)
 
 
 # Serving the uploaded file
@@ -96,9 +109,8 @@ def fit_uploaded_data(full_path_file):
         for row in reader:
             temperature_list.append(float(row['temperature']))
             development_rate_list.append(float(row['dev_rate']))
-        print(temperature_list)
-        print(development_rate_list)
-
+        # print(temperature_list)
+        # print(development_rate_list)
         # Instantiate model
         model = DevelopmentRateModel()
         # Guess parameters
@@ -108,12 +120,4 @@ def fit_uploaded_data(full_path_file):
         fit = model.fit(development_rate_list, params,
                         temperature=temperature_list)
         # Print fit report
-        print(fit.fit_report())
-        # https://matplotlib.org/3.3.2/faq/howto_faq.html
-        # #how-to-use-matplotlib-in-a-web-application-server
-        fig = Figure()
-        fit.plot_fit()
-        fit.plot_residuals()
-        buf = BytesIO()
-        fig.savefig(buf, format="png")
-        # Plot fit results
+        return fit
