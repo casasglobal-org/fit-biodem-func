@@ -10,8 +10,11 @@ from flask import (
     flash, request, render_template, redirect,
     url_for, send_from_directory)
 from werkzeug.utils import secure_filename
+import base64
+from io import BytesIO
+from matplotlib.figure import Figure
 from .user_data import create_app
-from .fit_lib import DevelopmentRateModel
+from .fit_lib import DevelopmentRateModel, plt
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -50,8 +53,10 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            fit_uploaded_data(app.config['UPLOAD_FOLDER'], filename)
+            csv_upload_file = os.path.join(
+                app.config['UPLOAD_FOLDER'], filename)
+            file.save(csv_upload_file)
+            fit_uploaded_data(csv_upload_file)
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return render_template('index.html')
@@ -78,10 +83,9 @@ def get_userdata():
 
 
 # https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask 
-def fit_uploaded_data(path, filename):
+def fit_uploaded_data(full_path_file):
     # Deduce the format of the CSV file
-    csv_upload_file = os.path.join(path, filename)
-    with open(csv_upload_file, newline='') as csvfile:
+    with open(full_path_file, newline='') as csvfile:
         # dialect = csv.Sniffer().sniff(csvfile.readline(), ['\t', ','])
         # csvfile.seek(0)  # sets the pointer to the biginning
         reader = csv.DictReader(csvfile, delimiter='\t')
@@ -94,3 +98,22 @@ def fit_uploaded_data(path, filename):
             development_rate_list.append(float(row['dev_rate']))
         print(temperature_list)
         print(development_rate_list)
+
+        # Instantiate model
+        model = DevelopmentRateModel()
+        # Guess parameters
+        params = model.guess(development_rate_list,
+                             temperature=temperature_list)
+        # Fit function
+        fit = model.fit(development_rate_list, params,
+                        temperature=temperature_list)
+        # Print fit report
+        print(fit.fit_report())
+        # https://matplotlib.org/3.3.2/faq/howto_faq.html
+        # #how-to-use-matplotlib-in-a-web-application-server
+        fig = Figure()
+        fit.plot_fit()
+        fit.plot_residuals()
+        buf = BytesIO()
+        fig.savefig(buf, format="png")
+        # Plot fit results
