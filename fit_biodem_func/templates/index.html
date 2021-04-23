@@ -18,10 +18,13 @@
 
     {% if filename and report_string %}
       <h2>Plot</h2>
-      <img src="{{ url_for('send_plot_file', filename=filename) }}" alt="Plot with lmfit results">
+      <img class="pure-img" src="{{ url_for('send_plot_file', filename=filename) }}" width="70%" alt="Plot with lmfit results">
 
       <h2>Report</h2>
-      <p>{{ report_string }}</p>
+      {% for para in report_string %}
+        <p>{{para}}</p>
+      {% endfor %}
+
     {% endif %}
 
 </body>
