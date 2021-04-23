@@ -51,7 +51,7 @@ def upload_file():
             app.config['UPLOAD_FOLDER'], filename)
         file.save(csv_upload_file)
         fit = fit_uploaded_data(csv_upload_file)
-        fit_report_string = fit.fit_report()
+        fit_report_string = fit.fit_report().splitlines()
 
         png_plot_file = create_plot(app.config['PLOT_FOLDER'], fit, filename)
 
