@@ -25,7 +25,7 @@ def allowed_file(filename):
 # https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    fit_report_string, filename = None, None
+    fit_report_string, png_plot_file = None, None
 
     if request.method == 'POST':
 
@@ -55,10 +55,10 @@ def upload_file():
 
         png_plot_file = create_plot(app.config['PLOT_FOLDER'], fit, filename)
 
-    filename = os.path.basename(png_plot_file) if png_plot_file else None
+    png_plot_file = os.path.basename(png_plot_file) if png_plot_file else None
 
     return render_template('index.html',
-                           filename=filename,
+                           filename=png_plot_file,
                            report_string=fit_report_string)
 
 
