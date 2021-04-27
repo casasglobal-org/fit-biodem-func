@@ -6,10 +6,10 @@ import io
 from .fit_lib import DevelopmentRateModel, plt
 
 
-def fit_uploaded_data_aws(bucket_name, file_name):
+def fit_uploaded_data_aws(file_name, bucket_name):
     s3 = boto3.resource('s3')
-    bucket = s3.Bucket('bucket_name')
-    obj = bucket.Object(key='file_name')
+    bucket = s3.Bucket(bucket_name)
+    obj = bucket.Object(key=file_name)
     response = obj.get()
     data = response['Body'].read().decode('utf-8')
     temperature_list = []
