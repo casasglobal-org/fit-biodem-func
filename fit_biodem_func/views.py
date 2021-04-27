@@ -26,16 +26,28 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 
-def upload_to_s3(filepath, bucket=S3_BUCKET):
-    session = boto3.Session(
+def upload_to_s3(filepath, bucket=S3_BUCKET, acl="public-read"):
+    s3 = boto3.client(
+        's3',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY
     )
-    s3 = session.resource('s3')
-    ret = s3.Bucket(bucket).put_object(
-        Key=os.path.basename(filepath),
-        Body=open(filepath, 'rb'),
-        ACL='public-read')
+    # s3 = session.resource('s3')
+
+    s3.upload_fileobj(
+        filepath,
+        bucket,
+        filepath.filename,
+        ExtraArgs={
+            "ACL": acl,
+            "ContentType": filepath.content_type
+        }
+        )
+
+    # ret = s3.Bucket(bucket).put_object(
+    #     Key=os.path.basename(filepath),
+    #     Body=open(filepath, 'rb'),
+    #     ACL='public-read')
     return FILE_URL.format(bucket=bucket, filename=ret.key)
 
 
@@ -72,13 +84,13 @@ def upload_file():
             return redirect(request.url)
 
         filename = secure_filename(file.filename)
-
+        print(filename)
         # csv_upload_file = os.path.join(
         #     app.config['UPLOAD_FOLDER'], filename)
         # file.save(csv_upload_file)
 
-        csv_upload_file = 'uploads/' + filename
-        upload_to_s3(csv_upload_file)
+        csv_upload_file = file
+        upload_to_s3(csv_upload_file, bucket=S3_BUCKET)
 
         fit = fit_uploaded_data_aws(csv_upload_file, S3_BUCKET)
         fit_report_string = fit.fit_report().splitlines()
