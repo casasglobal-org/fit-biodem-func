@@ -21,10 +21,11 @@
       <img class="pure-img" src="{{filename}}" width="70%" alt="Plot with lmfit results">
 
       <h2>Report</h2>
+      <pre>
       {% for para in report_string %}
-        <p>{{para}}</p>
+      {{para}}
       {% endfor %}
-
+      </pre>
     {% endif %}
 
 </body>

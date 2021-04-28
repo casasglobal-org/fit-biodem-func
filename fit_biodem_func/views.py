@@ -9,14 +9,14 @@ from .user_data import create_app
 from .utils import fit_uploaded_data_aws, create_plot
 
 # UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
-# PLOT_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/plots')
+PLOT_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/plots')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 app = create_app()
 
 # The old local way
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# app.config['PLOT_FOLDER'] = PLOT_FOLDER
+app.config['PLOT_FOLDER'] = PLOT_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
