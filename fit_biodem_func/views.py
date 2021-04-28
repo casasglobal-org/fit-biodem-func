@@ -82,7 +82,7 @@ def upload_file():
         csv_upload_file = file
         upload_to_s3(csv_upload_file, bucket=S3_BUCKET)
 
-        fit = fit_uploaded_data_aws(file.filename, S3_BUCKET)
+        fit = fit_uploaded_data_aws("uploads/" + file.filename, S3_BUCKET)
         fit_report_string = fit.fit_report().splitlines()
 
         png_plot_file = create_plot(app.config['PLOT_FOLDER'], fit, filename)
