@@ -8,14 +8,14 @@ from .user_data import create_app
 from .utils import fit_uploaded_data_aws, create_plot
 
 # UPLOAD_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/uploads')
-# PLOT_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/plots')
+PLOT_FOLDER = os.path.join(os.getcwd(), 'fit_biodem_func/plots')
 ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
 app = create_app()
 
 # The old local way
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-# app.config['PLOT_FOLDER'] = PLOT_FOLDER
+app.config['PLOT_FOLDER'] = PLOT_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
@@ -35,7 +35,7 @@ def upload_to_s3(filepath, bucket=S3_BUCKET):
 # https://stackoverflow.com/a/60239208/8677447
     s3 = session.resource('s3')
     ret = s3.Bucket(bucket).put_object(
-        Key='uploads/'+filepath.filename,
+        Key='uploads/' + filepath.filename,
         Body=filepath.read(),
         ACL='public-read')
     return FILE_URL.format(bucket=bucket, filename=ret.key)
