@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <title>Fit biodemographic functions</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="main">
+
+    <h1>Upload text file with data to fit</h1>
+
+    <div>
+        <form method=post enctype=multipart/form-data>
+          <p><input type=file name=file></p>
+          <p><input type=submit value=Upload></p>
+        </form>
+    </div>
+
+    {% if filename and report_string %}
+      <h2>Plot</h2>
+      <img class="pure-img" src="{{ url_for('send_plot_file', filename=filename) }}" width="70%" alt="Plot with lmfit results">
+
+      <h2>Report</h2>
+      {% for para in report_string %}
+        <p>{{para}}</p>
+      {% endfor %}
+
+    {% endif %}
+
+</body>

@@ -43,12 +43,19 @@ class DevelopmentRateModel(lmfit.Model):
 
 
 if __name__ == "__main__":
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
 
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
     # Instantiate model
     model = DevelopmentRateModel()
     # Guess parameters
     params = model.guess(development_rate_list_tuta,
-                         temperature=temperature_list_tuta)
+                        temperature=temperature_list_tuta)
     # Fit function
     fit = model.fit(development_rate_list_tuta, params,
                     temperature=temperature_list_tuta)
