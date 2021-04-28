@@ -1,6 +1,5 @@
 import csv
 import os
-import boto3
 import io
 
 from .aws import retrieve_from_s3, upload_to_s3
