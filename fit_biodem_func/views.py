@@ -21,7 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 # The AWS way
 FILE_URL = 'https://{bucket}.s3.eu-west-1.amazonaws.com/{filename}'
-S3_BUCKET = 'fit-biodem-func'
+S3_BUCKET = os.environ.get('S3_BUCKET')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
