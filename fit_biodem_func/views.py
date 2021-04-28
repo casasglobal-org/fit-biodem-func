@@ -4,7 +4,7 @@ from flask import (flash, request, render_template,
                    redirect, send_from_directory)
 from werkzeug.utils import secure_filename
 
-from .aws import upload_to_s3, S3_BUCKET
+from .aws import upload_to_s3
 from .user_data import create_app
 from .utils import fit_uploaded_data_aws, create_plot
 
@@ -61,7 +61,7 @@ def upload_file():
         csv_upload_file = file
         upload_to_s3(csv_upload_file)
 
-        fit = fit_uploaded_data_aws("uploads/" + file.filename, S3_BUCKET)
+        fit = fit_uploaded_data_aws(file.filename)
         fit_report_string = fit.fit_report().splitlines()
 
         png_plot_file = create_plot(fit, filename)

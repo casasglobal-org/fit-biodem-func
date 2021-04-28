@@ -3,15 +3,12 @@ import os
 import boto3
 import io
 
+from .aws import retrieve_from_s3
 from .fit_lib import DevelopmentRateModel, plt
 
 
-def fit_uploaded_data_aws(file_name, bucket_name):
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
-    obj = bucket.Object(key=file_name)
-    response = obj.get()
-    data = response['Body'].read().decode('utf-8')
+def fit_uploaded_data_aws(file_name):
+    data = retrieve_from_s3(f"uploads/{file_name}")
     temperature_list = []
     development_rate_list = []
     for row in csv.DictReader(io.StringIO(data), delimiter='\t'):

@@ -21,3 +21,12 @@ def upload_to_s3(filepath, bucket=S3_BUCKET):
         Body=filepath.read(),
         ACL='public-read')
     return FILE_URL.format(bucket=bucket, filename=ret.key)
+
+
+def retrieve_from_s3(file_name, bucket_name=S3_BUCKET):
+    s3 = boto3.resource('s3')
+    bucket = s3.Bucket(bucket_name)
+    obj = bucket.Object(key=file_name)
+    response = obj.get()
+    data = response['Body'].read().decode('utf-8')
+    return data
