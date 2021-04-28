@@ -37,14 +37,16 @@ def upload_file():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        filename = secure_filename(file.filename)
+        print(filename)
 
         # if user does not select file, browser also
         # submit an empty part without filename
-        if file.filename == '':
+        if filename == '':
             flash('No selected file')
             return redirect(request.url)
 
-        if not allowed_file(file.filename):
+        if not allowed_file(filename):
             msg = (
                     f'File extension not allowed'
                     f' ({", ".join(ALLOWED_EXTENSIONS)})'
@@ -52,21 +54,12 @@ def upload_file():
             flash(msg)
             return redirect(request.url)
 
-        filename = secure_filename(file.filename)
-        print(filename)
-        # csv_upload_file = os.path.join(
-        #     app.config['UPLOAD_FOLDER'], filename)
-        # file.save(csv_upload_file)
+        upload_to_s3(filename, file.read())
 
-        csv_upload_file = file
-        upload_to_s3(csv_upload_file)
-
-        fit = fit_uploaded_data_aws(file.filename)
+        fit = fit_uploaded_data_aws(filename)
         fit_report_string = fit.fit_report().splitlines()
 
         png_plot_file = create_plot(fit, filename)
-
-    png_plot_file = os.path.basename(png_plot_file) if png_plot_file else None
 
     return render_template('index.html',
                            filename=png_plot_file,
