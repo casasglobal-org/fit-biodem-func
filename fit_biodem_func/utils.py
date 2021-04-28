@@ -59,7 +59,8 @@ def fit_uploaded_data(full_path_file):
         return fit
 
 
-def create_plot(target_folder, fit, filename):
+def create_plot(fit, filename, target_folder="plots"):
+    # TODO: put this file in S3 bucket > plots subfolder
     base_filename = os.path.splitext(filename)[0]
     png_plot_file = os.path.join(target_folder, base_filename + '.png')
     plt.ioff()

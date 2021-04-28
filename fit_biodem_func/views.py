@@ -85,7 +85,7 @@ def upload_file():
         fit = fit_uploaded_data_aws("uploads/" + file.filename, S3_BUCKET)
         fit_report_string = fit.fit_report().splitlines()
 
-        png_plot_file = create_plot(app.config['PLOT_FOLDER'], fit, filename)
+        png_plot_file = create_plot(fit, filename)
 
     png_plot_file = os.path.basename(png_plot_file) if png_plot_file else None
 
