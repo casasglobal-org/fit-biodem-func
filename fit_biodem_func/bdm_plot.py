@@ -6,7 +6,7 @@ physiologically based demographic models (PBDMs, see https
 from matplotlib import pyplot as plt
 import numpy as np
 
-from .bdm_lib import development_rate
+from .bdm_lib import development_rate_bounded
 
 
 # Sample parameters for the developmental rate function of Tuta absoluta
@@ -48,7 +48,7 @@ def get_development_rates(
         a list of corresponding developmental rates."""
     dev_list = []
     for temperature in temperature_list:
-        dev_daily = development_rate(
+        dev_daily = development_rate_bounded(
                 temperature,
                 a_scale_parameter,
                 b_shape_parameter,
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         x_label='Temperature (°C)',
         y_label='Day$^-1$',
         lower_temperature_threshold=lower_temperature_threshold_tuta-2,
-        upper_temperature_threshold=upper_temperature_threshold_tuta+2
+        upper_temperature_threshold=upper_temperature_threshold_tuta+10
         )
 
     # Plot developmental rate function for Ceratitis capitata
@@ -97,5 +97,5 @@ if __name__ == "__main__":
         x_label='Temperature (°C)',
         y_label='Day$^-1$',
         lower_temperature_threshold=lower_temperature_threshold_medfly-2,
-        upper_temperature_threshold=upper_temperature_threshold_medfly+2
+        upper_temperature_threshold=upper_temperature_threshold_medfly+10
         )

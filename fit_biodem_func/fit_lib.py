@@ -6,10 +6,11 @@ https://doi.org/10.1111/epp.12224).
 
 from matplotlib import pyplot as plt
 from .bdm_lib import development_rate
+from lmfit import Parameter
 import numpy as np
 import lmfit
-import matplotlib
-matplotlib.use('Agg')  # https://stackoverflow.com/a/15713545/8677447
+# import matplotlib
+# matplotlib.use('Agg')  # https://stackoverflow.com/a/15713545/8677447
 
 # Data:
 # dtype=float hint from https://stackoverflow.com/a/43287598/8677447
@@ -22,7 +23,7 @@ development_rate_list_tuta = np.array([0.0087, 0.0156, 0.0286, 0.0435, 0.0556,
                                        0.0154, 0.0312, 0.0417, 0.0500, 0.0500,
                                        0.0588, 0.0131, 0.0250, 0.0417, 0.0080,
                                        0.0099, 0.0173, 0.0276, 0.0409, 0.0508,
-                                       0.0546, 0], dtype=float)
+                                       0.0546, 0.0000], dtype=float)
 
 
 class DevelopmentRateModel(lmfit.Model):
@@ -35,17 +36,17 @@ class DevelopmentRateModel(lmfit.Model):
 
         def pset(param, value):
             params["%s%s" % (self.prefix, param)].set(value=value)
-        pset("a_scale_parameter", 0.0001)
-        pset("b_shape_parameter", 2)
+        pset("a_scale_parameter", 0.0024)
+        pset("b_shape_parameter", 3.95)
         pset("lower_temperature_threshold", np.min(temperature))
-        pset("upper_temperature_threshold", np.max(temperature))
+        pset("upper_temperature_threshold", 40)
         return lmfit.models.update_param_vals(params, self.prefix, **kwargs)
 
 
 if __name__ == "__main__":
 
     # Instantiate model
-    model = DevelopmentRateModel()
+    model = DevelopmentRateModel(nan_policy='propagate')
     # Guess parameters
     params = model.guess(development_rate_list_tuta,
                          temperature=temperature_list_tuta)
@@ -57,6 +58,26 @@ if __name__ == "__main__":
     # Plot fit results
     fit.plot_fit()
     fit.plot_residuals()
+    plt.show()
+
+    model2 = DevelopmentRateModel(nan_policy='propagate')
+    result = model2.fit(development_rate_list_tuta,
+                        temperature=temperature_list_tuta,
+                        a_scale_parameter=Parameter(
+                           'a_scale_parameter', value=0.0024, vary=False),
+                        b_shape_parameter=Parameter(
+                           'b_shape_parameter', value=3.95, vary=False),
+                        lower_temperature_threshold=Parameter(
+                           'lower_temperature_threshold',
+                           value=7.9, vary=False),
+                        upper_temperature_threshold=Parameter(
+                           'upper_temperature_threshold',
+                           value=34.95, vary=False)
+                        )
+
+    print(result.fit_report())
+    result.plot_fit()
+    result.plot_residuals()
     plt.show()
 
     # Check out
