@@ -18,10 +18,10 @@ def development_rate_bounded(
         are lower and upper thermal thresholds
         temperature_series is a list of temperatures."""
     development_rate_bounded = 0
-    if lower_temperature_threshold < temperature < upper_temperature_threshold:
+    if lower_temperature_threshold < temperature:
         development_rate_bounded = (
-            a_scale_parameter
-            * (temperature - lower_temperature_threshold)
+            (a_scale_parameter
+                * (temperature - lower_temperature_threshold))
             / (1 + b_shape_parameter
                 ** (temperature - upper_temperature_threshold))
         )
@@ -42,14 +42,11 @@ def development_rate(
         are lower and upper thermal thresholds
         temperature_series is a list of temperatures.
         Version without temperature bounds. See development_rate_bounded"""
-    development_rate = (
-        a_scale_parameter
-        * (temperature - lower_temperature_threshold)
+    return (
+        (a_scale_parameter
+            * (temperature - lower_temperature_threshold))
         / (1 + b_shape_parameter
-            ** (temperature - upper_temperature_threshold))
-    )
-    return development_rate
-
+            ** (temperature - upper_temperature_threshold)))
 
 
     """ The following equations need to be turned into functions
