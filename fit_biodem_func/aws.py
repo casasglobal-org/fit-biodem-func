@@ -3,14 +3,14 @@ import os
 import boto3
 
 FILE_URL = 'https://{bucket}.s3.eu-west-1.amazonaws.com/{filename}'
-S3_BUCKET = os.environ.get('S3_BUCKET')
+AWS_S3_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_REGION_NAME = os.environ.get('AWS_REGION_NAME')
 
 
 def upload_to_s3(filename, body, folder="uploads",
-                 bucket=S3_BUCKET, region_name=AWS_REGION_NAME):
+                 bucket=AWS_S3_BUCKET_NAME, region_name=AWS_REGION_NAME):
     session = boto3.Session(
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
@@ -28,7 +28,7 @@ def upload_to_s3(filename, body, folder="uploads",
     return FILE_URL.format(bucket=bucket, filename=ret.key)
 
 
-def retrieve_from_s3(file_name, bucket_name=S3_BUCKET):
+def retrieve_from_s3(file_name, bucket_name=AWS_S3_BUCKET_NAME):
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(bucket_name)
     obj = bucket.Object(key=file_name)
