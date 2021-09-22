@@ -2,7 +2,7 @@ import os
 
 import boto3
 
-FILE_URL = 'https://{bucket}.s3.eu-west-1.amazonaws.com/{filename}'
+FILE_URL = 'https://{bucket}.s3.{region}.amazonaws.com/{filename}'
 AWS_S3_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -25,7 +25,7 @@ def upload_to_s3(filename, body, folder="uploads",
         Body=body,
         ACL='public-read') # ContentType='image/png'
 
-    return FILE_URL.format(bucket=bucket, filename=ret.key)
+    return FILE_URL.format(bucket=bucket, region=region_name, filename=ret.key)
 
 
 def retrieve_from_s3(file_name, bucket_name=AWS_S3_BUCKET_NAME):
