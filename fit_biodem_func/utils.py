@@ -65,6 +65,17 @@ def fit_uploaded_data(full_path_file):
 
 
 def create_plot(fit, filename, target_folder="plots"):
+    """
+    Create a plot and save it as a PNG file.
+
+    Parameters:
+        fit (object): The fit object containing the data to plot.
+        filename (str): The name of the file to save the plot as.
+        target_folder (str, optional): The folder to save the plot in. Defaults to "plots".
+
+    Returns:
+        bool: True if the plot was successfully created and saved, False otherwise.
+    """
     target_filename = os.path.splitext(
         os.path.basename(filename)
     )[0] + '.png'
