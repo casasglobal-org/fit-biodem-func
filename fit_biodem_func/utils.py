@@ -29,6 +29,15 @@ def fit_uploaded_data_aws(file_name):
 
 # https://viveksb007.github.io/2018/04/uploading-processing-downloading-files-in-flask
 def fit_uploaded_data(full_path_file):
+    """
+    Fit uploaded data from a CSV file.
+    
+    Args:
+        full_path_file (str): The full path to the CSV file.
+        
+    Returns:
+        fit: The fit object representing the fitted data.
+    """
     # Deduce the format of the CSV file
     with open(full_path_file, newline='') as csvfile:
         # dialect = csv.Sniffer().sniff(csvfile.readline(), ['\t', ','])
